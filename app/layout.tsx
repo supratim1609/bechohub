@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Space_Grotesk } from "next/font/google"; // Import Space Grotesk
+import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,19 +23,19 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
     metadataBase: new URL("https://bechohub.com"),
     title: {
-        default: "bechoHub | India's Premiere B2B Network",
+        default: "bechoHub | Building India's Next B2B Trade Network (Pre-Launch)",
         template: "%s | bechoHub",
     },
     description:
-        "Connect. Trade. Grow. India's leading B2B marketplace connecting verified manufacturers with high-intent buyers. Source smarter, grow faster.",
+        "bechoHub is an upcoming Indian B2B commerce and trade infrastructure platform connecting businesses with verified manufacturers and suppliers. Currently in pre-launch development.",
     keywords: [
-        "B2B Marketplace",
-        "India Manufacturing",
-        "Industrial Goods",
-        "Supply Chain",
-        "Wholesale",
-        "Sourcing",
-        "Factory Direct",
+        "B2B Marketplace India",
+        "Indian Manufacturing Network",
+        "Industrial Procurement Platform",
+        "B2B Trade Infrastructure",
+        "Chemicals Sourcing",
+        "Construction Materials Procurement",
+        "Factory Direct India",
     ],
     authors: [{ name: "bechoHub Team" }],
     creator: "bechoHub",
@@ -43,22 +43,24 @@ export const metadata: Metadata = {
         type: "website",
         locale: "en_IN",
         url: "https://bechohub.com",
-        title: "bechoHub | India's Premiere B2B Network",
-        description: "The all-in-one platform for buyers to source smarter and suppliers to grow faster.",
+        title: "bechoHub | Building India's Next B2B Trade Network (Pre-Launch)",
+        description:
+            "A new approach to connecting Indian businesses, discovering verified suppliers, and making trade transparent. In pre-launch development.",
         siteName: "bechoHub",
         images: [
             {
                 url: "/opengraph-image",
                 width: 1200,
                 height: 630,
-                alt: "bechoHub - India's Premiere B2B Network",
+                alt: "bechoHub - Building India's Next B2B Trade Network",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "bechoHub | India's Premiere B2B Network",
-        description: "The all-in-one platform for buyers to source smarter and suppliers to grow faster.",
+        title: "bechoHub | Building India's Next B2B Trade Network (Pre-Launch)",
+        description:
+            "A new approach to connecting Indian businesses, discovering verified suppliers, and making trade transparent. In pre-launch development.",
         creator: "@bechohub",
         images: ["/opengraph-image"],
     },

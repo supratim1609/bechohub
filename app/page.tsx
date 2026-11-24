@@ -1,14 +1,12 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { ArrowRight, ShieldCheck, CheckCircle2, Key, FastForward } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// We keep a simple FadeIn for blocks
 const FadeIn = ({
     children,
     delay = 0,
@@ -21,175 +19,166 @@ const FadeIn = ({
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
         className={className}
     >
         {children}
     </motion.div>
 );
 
-const CommodityCard = ({
-    href,
-    src,
-    alt,
-    title,
-    subtitle,
-    delay,
-}: {
-    href: string;
-    src: string;
-    alt: string;
-    title: string;
-    subtitle: string;
-    delay: number;
-}) => {
-    const ref = useRef(null);
-    // On mobile screens, trigger 'active' state when scrolling through the middle of the screen
-    const isInView = useInView(ref, { margin: "-20% 0px -20% 0px" });
+const categories = [
+    {
+        href: "/browse?category=chemicals",
+        src: "/images/chemicals_trade.png",
+        alt: "Industrial chemicals",
+        title: "Chemicals",
+        subtitle: "Industrial & specialty chemicals",
+    },
+    {
+        href: "/browse?category=industrial",
+        src: "/images/hero_industrial.png",
+        alt: "Industrial goods",
+        title: "Industrial Goods",
+        subtitle: "Machinery, components & supplies",
+    },
+    {
+        href: "/browse?category=construction",
+        src: "/images/construction_materials.png",
+        alt: "Construction materials",
+        title: "Construction",
+        subtitle: "Materials & building supplies",
+    },
+    {
+        href: "/browse?category=agriculture",
+        src: "/images/agriculture_supplies.png",
+        alt: "Agriculture supplies",
+        title: "Agriculture",
+        subtitle: "Seeds, fertilizers & farm supplies",
+    },
+    {
+        href: "/browse?category=textiles",
+        src: "/images/textile_mill.png",
+        alt: "Textiles",
+        title: "Textiles",
+        subtitle: "Fabrics, yarn & garment supplies",
+    },
+];
 
-    return (
-        <FadeIn delay={delay}>
-            <Link
-                ref={ref}
-                href={href}
-                data-active={isInView}
-                className="group block relative h-[300px] md:h-[400px] border border-zinc-800 hover:border-zinc-500 transition-colors duration-500 overflow-hidden bg-zinc-900"
-            >
-                <Image
-                    src={src}
-                    alt={alt}
-                    fill
-                    className="object-cover opacity-[0.55] grayscale mix-blend-luminosity transition-all duration-1000 group-hover:mix-blend-normal group-hover:scale-105 group-hover:opacity-[1] group-hover:grayscale-0 max-md:group-data-[active=true]:mix-blend-normal max-md:group-data-[active=true]:scale-105 max-md:group-data-[active=true]:opacity-[1] max-md:group-data-[active=true]:grayscale-0"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
-                <div className="absolute top-4 right-4 md:top-6 md:right-6">
-                    <div className="w-8 h-8 rounded-full border border-zinc-700 flex flex-col justify-center items-center transition-colors duration-500 group-hover:bg-cyan-600 group-hover:border-cyan-600 max-md:group-data-[active=true]:bg-cyan-600 max-md:group-data-[active=true]:border-cyan-600">
-                        <ArrowRight className="text-white w-3 h-3 -rotate-45 transition-transform duration-500 group-hover:rotate-0 max-md:group-data-[active=true]:rotate-0" />
-                    </div>
-                </div>
-                <div className="absolute bottom-0 left-0 p-4 md:p-6 w-full">
-                    <div className="min-w-0 w-full pr-2">
-                        <h3 className="text-lg xl:text-xl font-black uppercase tracking-wider mb-1 text-white transition-colors duration-500 group-hover:text-cyan-500 max-md:group-data-[active=true]:text-cyan-500 truncate">
-                            {title}
-                        </h3>
-                        <p className="text-zinc-400 font-bold tracking-[0.2em] uppercase text-[8px] md:text-[9px] truncate">
-                            {subtitle}
-                        </p>
-                    </div>
-                </div>
-            </Link>
-        </FadeIn>
-    );
-};
+const plannedSteps = [
+    {
+        n: "01",
+        title: "Verified Discovery",
+        body: "Direct discovery of verified manufacturers, wholesalers and distributors across key industrial clusters, free from opaque intermediaries.",
+    },
+    {
+        n: "02",
+        title: "Structured RFQs & Quotes",
+        body: "Standardized technical specifications, comparable price structures, and transparent timelines that remove ambiguity from quoting.",
+    },
+    {
+        n: "03",
+        title: "Accountable Fulfilment",
+        body: "Clear digital purchase orders, delivery milestone tracking, and documented compliance for every commercial transaction.",
+    },
+];
 
 export default function Home() {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end start"],
-    });
-
-    const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-    const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-
     return (
-        <div className="min-h-screen bg-zinc-950 text-[#f0f0fa] font-sans overflow-x-hidden" ref={containerRef}>
+        <div className="min-h-screen bg-zinc-950 text-[#f0f0fa] font-sans overflow-x-hidden">
             <Navbar />
 
             <main>
-                {/* 1. HERO SECTION */}
-                <section className="relative h-screen w-full flex items-center overflow-hidden bg-zinc-950">
-                    <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0 z-0">
+                <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-zinc-950">
+                    <div className="absolute inset-0 z-0 pointer-events-none">
                         <Image
                             src="/images/hero_industrial.png"
                             alt="Industrial scale B2B trade"
                             fill
-                            className="object-cover opacity-30 mix-blend-luminosity grayscale"
+                            className="object-cover opacity-20 grayscale mix-blend-luminosity"
                             priority
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent" />
-                    </motion.div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950" />
+                    </div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-start mt-10">
+                    <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 md:pt-40 md:pb-32 w-full">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 28 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                         >
-                            <div className="inline-block border border-zinc-800 bg-zinc-900/50 px-4 py-2 mb-8 uppercase tracking-[0.3em] text-xs text-cyan-600 font-bold backdrop-blur-sm">
-                                Next-Gen B2B Trade Engine
-                            </div>
-                            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[110px] font-black tracking-tighter leading-[0.85] uppercase mb-8 max-w-6xl text-white">
-                                Close Real Deals.
-                                <br />
-                                <span className="text-cyan-700">Not Just Leads.</span>
-                            </h1>
-                            <p className="text-lg md:text-2xl text-zinc-400 max-w-2xl font-medium tracking-widest mb-12 uppercase leading-snug">
-                                Verified buyers. Trusted suppliers. Secure transactions.
+                            <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-6 md:mb-8">
+                                The Next Chapter of Indian B2B Trade
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-6">
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.08] sm:leading-[1.04] max-w-4xl mb-6 md:mb-8">
+                                India&apos;s next trade network <br />
+                                <span className="text-zinc-400">is being built.</span>
+                            </h1>
+
+                            <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl leading-relaxed mb-10 md:mb-12 font-normal">
+                                A new approach to connecting businesses, discovering suppliers and making trade more
+                                transparent. We&apos;re building something different.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4">
                                 <Link
-                                    href="/signup?role=seller"
-                                    className="group relative inline-flex items-center justify-center px-10 py-5 bg-cyan-700 text-white font-bold uppercase tracking-[0.2em] text-sm hover:bg-cyan-600 transition-colors duration-300"
+                                    href="/about"
+                                    className="inline-flex items-center justify-center min-h-[48px] px-8 py-3.5 bg-white text-zinc-950 font-semibold text-sm hover:bg-zinc-100 transition-colors duration-200 w-full sm:w-auto"
                                 >
-                                    Become a Supplier
-                                    <ArrowRight className="ml-4 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                                    Discover Our Vision
+                                    <ArrowRight className="h-4 w-4 ml-2" />
+                                </Link>
+                                <Link
+                                    href="/browse"
+                                    className="inline-flex items-center justify-center min-h-[48px] px-8 py-3.5 border border-zinc-700 text-white font-semibold text-sm hover:border-zinc-500 hover:bg-white/5 transition-all duration-200 w-full sm:w-auto"
+                                >
+                                    Explore Focus Areas
                                 </Link>
                             </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="mt-16 md:mt-20 flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-8 border-t border-zinc-900 pt-8 text-xs text-zinc-500 font-medium"
+                        >
+                            <span>Rigorous supplier credentialing by design</span>
+                            <span className="text-zinc-800 hidden sm:inline">/</span>
+                            <span>Standardized RFQ & quotation protocols</span>
+                            <span className="text-zinc-800 hidden sm:inline">/</span>
+                            <span>Initial focus: Chemicals · Industrial · Construction</span>
                         </motion.div>
                     </div>
                 </section>
 
-                {/* 2. TRUST SECTION */}
-                <section className="py-24 bg-zinc-950 border-y border-zinc-900 relative z-20">
+                <section id="how-it-works" className="py-20 md:py-32 bg-zinc-950 border-t border-zinc-900">
                     <div className="max-w-7xl mx-auto px-6">
-                        <div className="text-center mb-20">
-                            <FadeIn>
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 text-white">
-                                    Every Business is <span className="text-zinc-600">Verified.</span>
-                                    <br />
-                                    Every Deal is <span className="text-zinc-600">Protected.</span>
-                                </h2>
-                            </FadeIn>
-                        </div>
+                        <FadeIn className="mb-14 md:mb-20 max-w-2xl">
+                            <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3 md:mb-4">
+                                Planned Workflow
+                            </p>
+                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-3 md:mb-4">
+                                Procurement designed for structure and transparency.
+                            </h2>
+                            <p className="text-sm text-zinc-400 leading-relaxed">
+                                How business trade will execute on bechoHub when the platform opens for commercial
+                                onboarding.
+                            </p>
+                        </FadeIn>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {[
-                                {
-                                    icon: ShieldCheck,
-                                    title: "Verified Suppliers",
-                                    desc: "Rigorous KYC & active verification. No shell companies.",
-                                },
-                                {
-                                    icon: CheckCircle2,
-                                    title: "Verified Buyers",
-                                    desc: "High intent, financially vetted procurement teams.",
-                                },
-                                {
-                                    icon: Key,
-                                    title: "Secure Escrow",
-                                    desc: "Your capital is locked safely until fulfillment.",
-                                },
-                                {
-                                    icon: FastForward,
-                                    title: "Faster Closures",
-                                    desc: "From RFQ to PO in days, not months. Zero friction.",
-                                },
-                            ].map((item, i) => (
-                                <FadeIn key={i} delay={i * 0.1} className="h-full">
-                                    <div className="h-full p-8 border border-zinc-800 bg-zinc-900/30 flex flex-col items-start hover:bg-zinc-900/50 hover:border-zinc-700 transition-all duration-300">
-                                        <div className="p-3 bg-cyan-950/30 border border-cyan-900/30 mb-6 group-hover:bg-cyan-900/50 transition-colors">
-                                            <item.icon className="h-8 w-8 text-cyan-600" />
-                                        </div>
-                                        <h3 className="text-lg font-black uppercase tracking-widest mb-4 text-white">
-                                            {item.title}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800">
+                            {plannedSteps.map((step, i) => (
+                                <FadeIn key={step.n} delay={i * 0.1}>
+                                    <div className="bg-zinc-950 p-8 sm:p-10 md:p-12 hover:bg-zinc-900 transition-colors duration-300 h-full">
+                                        <span className="block text-xs font-mono font-semibold text-zinc-600 mb-6">
+                                            {step.n}
+                                        </span>
+                                        <h3 className="text-base sm:text-lg font-semibold text-white mb-2 md:mb-3">
+                                            {step.title}
                                         </h3>
-                                        <p className="text-zinc-500 font-medium text-sm tracking-wide leading-relaxed">
-                                            {item.desc}
-                                        </p>
+                                        <p className="text-sm text-zinc-500 leading-relaxed">{step.body}</p>
                                     </div>
                                 </FadeIn>
                             ))}
@@ -197,308 +186,184 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* 3. HOW IT WORKS (SIMPLIFIED) */}
-                <section className="py-32 bg-zinc-950">
+                <section id="categories" className="py-20 md:py-32 bg-zinc-950 border-t border-zinc-900">
                     <div className="max-w-7xl mx-auto px-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-                            {/* For Buyers */}
-                            <FadeIn>
-                                <div className="space-y-12">
-                                    <div className="border-b-2 border-zinc-900 pb-8">
-                                        <div className="text-cyan-700 text-sm font-black tracking-[0.3em] uppercase mb-4">
-                                            Command Center
-                                        </div>
-                                        <h3 className="text-5xl font-black uppercase tracking-tighter text-white">
-                                            For Buyers
-                                        </h3>
-                                    </div>
-                                    <div className="space-y-10">
-                                        {[
-                                            {
-                                                step: "01",
-                                                title: "Post Requirement",
-                                                desc: "Define your specs in under 30 seconds.",
-                                            },
-                                            {
-                                                step: "02",
-                                                title: "Get Verified Suppliers",
-                                                desc: "Smart matching brings the best directly to you.",
-                                            },
-                                            {
-                                                step: "03",
-                                                title: "Close Deal Securely",
-                                                desc: "Execute contracts and pay via built-in Escrow.",
-                                            },
-                                        ].map((item, i) => (
-                                            <div key={i} className="flex gap-8 items-start group">
-                                                <span className="text-4xl font-black text-zinc-800 group-hover:text-cyan-600 transition-colors leading-none">
-                                                    {item.step}
-                                                </span>
-                                                <div>
-                                                    <h4 className="text-xl font-bold uppercase tracking-widest mb-3 text-white">
-                                                        {item.title}
-                                                    </h4>
-                                                    <p className="text-zinc-400 font-medium tracking-wide">
-                                                        {item.desc}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </FadeIn>
-
-                            {/* For Sellers */}
-                            <FadeIn delay={0.2}>
-                                <div className="space-y-12">
-                                    <div className="border-b-2 border-zinc-900 pb-8">
-                                        <div className="text-cyan-700 text-sm font-black tracking-[0.3em] uppercase mb-4">
-                                            Sales Engine
-                                        </div>
-                                        <h3 className="text-5xl font-black uppercase tracking-tighter text-white">
-                                            For Sellers
-                                        </h3>
-                                    </div>
-                                    <div className="space-y-10">
-                                        {[
-                                            {
-                                                step: "01",
-                                                title: "Get High-Intent Buyers",
-                                                desc: "No spam. Only verified RFQs with real intent score.",
-                                            },
-                                            {
-                                                step: "02",
-                                                title: "Send Quotes Fast",
-                                                desc: "Quick quote system baked right in to your dashboard.",
-                                            },
-                                            {
-                                                step: "03",
-                                                title: "Get Paid Securely",
-                                                desc: "Funds held in Escrow. Zero default risk on payouts.",
-                                            },
-                                        ].map((item, i) => (
-                                            <div key={i} className="flex gap-8 items-start group">
-                                                <span className="text-4xl font-black text-zinc-800 group-hover:text-cyan-600 transition-colors leading-none">
-                                                    {item.step}
-                                                </span>
-                                                <div>
-                                                    <h4 className="text-xl font-bold uppercase tracking-widest mb-3 text-white">
-                                                        {item.title}
-                                                    </h4>
-                                                    <p className="text-zinc-400 font-medium tracking-wide">
-                                                        {item.desc}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </FadeIn>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 4. PROBLEM VS SOLUTION */}
-                <section className="py-40 bg-zinc-900 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-
-                    <div className="max-w-7xl mx-auto px-6 relative z-10">
-                        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-center mb-24 max-w-4xl mx-auto leading-tight text-white">
-                            STOP WASTING TIME ON <span className="text-cyan-700">FAKE LEADS.</span>
-                        </h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-900 border border-zinc-900">
-                            <FadeIn className="bg-zinc-950">
-                                <div className="p-12 md:p-16 h-full">
-                                    <h3 className="text-3xl font-black uppercase tracking-widest text-zinc-600 mb-12 flex items-center gap-4">
-                                        <span className="text-zinc-800">✕</span> The Old Way
-                                    </h3>
-                                    <ul className="space-y-8">
-                                        {[
-                                            "Spam buyer leads & unqualified RFQs",
-                                            "Zero trust or physical verification",
-                                            "Endless non-transparent price wars",
-                                            "No payment security or legal cover",
-                                            "Weeks of follow-ups to finalize a deal",
-                                        ].map((text, i) => (
-                                            <li
-                                                key={i}
-                                                className="flex items-start gap-5 text-zinc-500 font-medium tracking-wide text-lg"
-                                            >
-                                                <div className="h-1.5 w-1.5 mt-2.5 rounded-full bg-zinc-800 shrink-0" />
-                                                {text}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </FadeIn>
-
-                            <FadeIn delay={0.2} className="bg-zinc-950">
-                                <div className="p-12 md:p-16 relative overflow-hidden h-full">
-                                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px] pointer-events-none" />
-                                    <h3 className="text-3xl font-black tracking-widest text-white mb-12 flex items-center gap-4 relative z-10">
-                                        <span className="text-cyan-600">✓</span>
-                                        <span className="flex items-center gap-2">
-                                            <span className="font-heading lowercase tracking-tighter">
-                                                becho<span className="text-cyan-600">Hub</span>
-                                            </span>
-                                            <span className="uppercase">WAY</span>
-                                        </span>
-                                    </h3>
-                                    <ul className="space-y-8 relative z-10">
-                                        {[
-                                            "Verified buyers only, intent scored",
-                                            "Smart matchmaking by precise spec",
-                                            "Premium pricing protected by Escrow",
-                                            "100% Secure payments and legal cover",
-                                            "Deals close in 48 hours autonomously",
-                                        ].map((text, i) => (
-                                            <li
-                                                key={i}
-                                                className="flex items-start gap-5 text-white font-bold tracking-wide text-lg"
-                                            >
-                                                <div className="p-0.5 bg-cyan-600/20 border border-cyan-600/50 rounded-full mt-1 shrink-0">
-                                                    <CheckCircle2 className="h-4 w-4 text-cyan-600" />
-                                                </div>
-                                                {text}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </FadeIn>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 5. CATEGORY FOCUS */}
-                <section className="py-32 bg-zinc-950 border-t border-zinc-900">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-20">
+                        <FadeIn className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
                             <div>
-                                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4 text-white">
-                                    Commodities.
+                                <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3 md:mb-4">
+                                    Focus Sectors
+                                </p>
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
+                                    Initial categories in development.
                                 </h2>
-                                <p className="text-zinc-500 tracking-[0.2em] uppercase font-bold text-sm">
-                                    Deep liquidity in strategic sectors
+                                <p className="text-sm text-zinc-500 max-w-xl">
+                                    We are curating vetted manufacturers and standardizing product catalogs across these
+                                    core supply sectors ahead of launch.
                                 </p>
                             </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
-                            <CommodityCard
-                                href="/category/agriculture"
-                                src="/images/agriculture_supplies.png"
-                                alt="Agriculture"
-                                title="Agriculture"
-                                subtitle="Tea, Grain, Spices"
-                                delay={0}
-                            />
-                            <CommodityCard
-                                href="/category/textile"
-                                src="/images/textile_mill.png"
-                                alt="Textile"
-                                title="Textile"
-                                subtitle="Yarn, Fabric, Garments"
-                                delay={0.1}
-                            />
-                            <CommodityCard
-                                href="/category/chemicals"
-                                src="/images/chemicals_trade.png"
-                                alt="Chemicals"
-                                title="Chemicals"
-                                subtitle="Industrial, Organic, Polymers"
-                                delay={0.2}
-                            />
-                            <CommodityCard
-                                href="/category/construction"
-                                src="/images/construction_materials.png"
-                                alt="Construction"
-                                title="Construction"
-                                subtitle="Cement, Steel, Machinery"
-                                delay={0.3}
-                            />
-                            <CommodityCard
-                                href="/category/electronics"
-                                src="/images/electronics_electrical.png"
-                                alt="Electronics"
-                                title="Electronics"
-                                subtitle="Components, Devices, Wiring"
-                                delay={0.4}
-                            />
-                        </div>
-
-                        <FadeIn delay={0.5} className="flex justify-center">
                             <Link
-                                href="/categories"
-                                className="group inline-flex items-center justify-center px-10 py-5 border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 text-white font-bold uppercase tracking-[0.2em] text-xs transition-colors duration-300"
+                                href="/browse"
+                                className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 hover:text-white transition-colors group shrink-0"
                             >
-                                Explore All Categories
-                                <ArrowRight className="ml-4 h-4 w-4 group-hover:translate-x-1 transition-transform text-cyan-600" />
+                                Explore Our Focus Areas
+                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </FadeIn>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-zinc-800">
+                            {categories.map((cat, i) => (
+                                <FadeIn key={cat.href} delay={i * 0.05}>
+                                    <Link
+                                        href={cat.href}
+                                        className="group relative block aspect-[4/5] sm:aspect-[3/4] bg-zinc-900 overflow-hidden"
+                                    >
+                                        <Image
+                                            src={cat.src}
+                                            alt={cat.alt}
+                                            fill
+                                            className="object-cover opacity-50 grayscale transition-all duration-700 group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                                        <div className="absolute bottom-0 left-0 p-5">
+                                            <h3 className="text-sm font-semibold text-white mb-1">{cat.title}</h3>
+                                            <p className="text-[11px] text-zinc-500 leading-tight">{cat.subtitle}</p>
+                                        </div>
+                                    </Link>
+                                </FadeIn>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
-                {/* 6. OUR GUARANTEE */}
-                <section className="py-32 bg-zinc-900 border-y border-zinc-900 relative">
-                    <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-16 md:gap-8">
-                        <FadeIn className="text-center md:text-left w-full border-b border-zinc-800 pb-16 md:border-b-0 md:pb-0 md:border-r md:pr-8">
-                            <h3 className="text-7xl md:text-8xl lg:text-[120px] font-black text-white mb-4 tracking-tighter leading-none">
-                                100<span className="text-cyan-700">%</span>
-                            </h3>
-                            <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-sm text-balance">
-                                Verified Network
-                            </p>
-                        </FadeIn>
-                        <FadeIn
-                            delay={0.1}
-                            className="text-center md:text-left w-full border-b border-zinc-800 pb-16 md:border-b-0 md:pb-0 md:border-r md:px-8"
-                        >
-                            <h3 className="text-7xl md:text-8xl lg:text-[120px] font-black text-white mb-4 tracking-tighter leading-none">
-                                0<span className="text-4xl md:text-6xl text-cyan-700">%</span>
-                            </h3>
-                            <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-sm text-balance">
-                                Fake Leads
-                            </p>
-                        </FadeIn>
-                        <FadeIn delay={0.2} className="text-center md:text-left w-full md:pl-8">
-                            <h3 className="text-7xl md:text-8xl lg:text-[120px] font-black text-white mb-4 tracking-tighter leading-none">
-                                24<span className="text-4xl md:text-6xl text-cyan-700">/7</span>
-                            </h3>
-                            <p className="text-zinc-500 font-bold uppercase tracking-[0.3em] text-sm text-balance">
-                                Trade Monitoring
-                            </p>
-                        </FadeIn>
+                <section className="py-20 md:py-32 bg-zinc-900 border-t border-zinc-800">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+                            <FadeIn>
+                                <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-4 md:mb-6">
+                                    Our Philosophy
+                                </p>
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-6 md:mb-8 leading-snug">
+                                    The old way is broken.
+                                    <br />
+                                    <span className="text-zinc-400">We&apos;re building the infrastructure.</span>
+                                </h2>
+                                <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-8 md:mb-10">
+                                    Traditional B2B procurement in India relies on personal networks, unverified
+                                    contacts and phone calls. It&apos;s slow, opaque and difficult to scale. bechoHub is
+                                    engineering a trust-first digital rail connecting verified enterprises across the
+                                    country.
+                                </p>
+                                <Link
+                                    href="/about"
+                                    className="inline-flex items-center gap-2 text-sm font-medium text-white hover:text-cyan-400 transition-colors group"
+                                >
+                                    Read our manifesto
+                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                </Link>
+                            </FadeIn>
+
+                            <FadeIn delay={0.12}>
+                                <div className="space-y-px bg-zinc-800">
+                                    {[
+                                        {
+                                            label: "01",
+                                            title: "Verification by design",
+                                            body: "Developing strict business credentialing and documentation standards before any supplier can list or quote.",
+                                        },
+                                        {
+                                            label: "02",
+                                            title: "Standardized product catalogs",
+                                            body: "Building consistent digital specifications to eliminate ambiguous inquiries and price disputes.",
+                                        },
+                                        {
+                                            label: "03",
+                                            title: "Asset-light infrastructure",
+                                            body: "Engineering software and workflow rails that facilitate trade at scale without warehouse or inventory burdens.",
+                                        },
+                                    ].map((item) => (
+                                        <div key={item.title} className="p-6 sm:p-7 bg-zinc-900">
+                                            <div className="flex items-baseline justify-between mb-2">
+                                                <h4 className="text-sm font-semibold text-white">{item.title}</h4>
+                                                <span className="text-[11px] font-mono text-zinc-600">
+                                                    {item.label}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed">
+                                                {item.body}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </FadeIn>
+                        </div>
                     </div>
                 </section>
 
-                {/* 7. FINAL CTA */}
-                <section className="relative min-h-[80vh] bg-zinc-950 flex justify-center items-center overflow-hidden">
-                    <div className="absolute inset-0 z-0">
+                <section className="relative py-20 md:py-32 bg-zinc-950 border-t border-zinc-900 overflow-hidden">
+                    <div className="absolute inset-0 z-0 pointer-events-none">
                         <Image
                             src="/images/container_ship.png"
-                            alt="Global Logistics"
+                            alt="Global logistics"
                             fill
-                            className="object-cover opacity-[0.55] grayscale mix-blend-luminosity"
+                            className="object-cover opacity-15 grayscale mix-blend-luminosity"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950" />
                     </div>
 
-                    <div className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center">
+                    <div className="relative z-10 max-w-7xl mx-auto px-6">
                         <FadeIn>
-                            <h2 className="text-5xl md:text-7xl lg:text-[100px] font-black tracking-tighter uppercase mb-16 leading-[0.85] text-white">
-                                START YOUR <br className="hidden md:block" />
-                                FIRST DEAL <span className="text-cyan-600 block sm:inline">TODAY.</span>
-                            </h2>
+                            <div className="max-w-2xl mb-12 md:mb-16">
+                                <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-4 md:mb-6">
+                                    Upcoming Platform
+                                </p>
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4 md:mb-6">
+                                    Be part of India&apos;s next trade infrastructure.
+                                </h2>
+                                <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
+                                    We are currently collaborating with select founding manufacturing partners and
+                                    enterprise procurement teams ahead of public launch.
+                                </p>
+                            </div>
 
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                                <Link
-                                    href="/signup?role=seller"
-                                    className="group inline-flex items-center justify-center px-12 py-6 bg-cyan-700 text-white font-black uppercase tracking-[0.2em] text-sm hover:bg-cyan-600 transition-colors duration-300"
-                                >
-                                    Join as Supplier
-                                    <ArrowRight className="ml-4 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                                </Link>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800 max-w-3xl">
+                                <div className="bg-zinc-950 hover:bg-zinc-900 transition-colors duration-300 p-8 sm:p-10">
+                                    <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3 md:mb-4">
+                                        For buyers
+                                    </p>
+                                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 md:mb-3">
+                                        Enterprise Sourcing
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mb-6 md:mb-8">
+                                        Learn how our standardized procurement workflows will help your team source
+                                        directly from verified Indian producers.
+                                    </p>
+                                    <Link
+                                        href="/about"
+                                        className="inline-flex items-center min-h-[44px] text-sm font-semibold text-white hover:text-cyan-400 transition-colors group"
+                                    >
+                                        Read Our Approach
+                                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </div>
+                                <div className="bg-zinc-950 hover:bg-zinc-900 transition-colors duration-300 p-8 sm:p-10">
+                                    <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-3 md:mb-4">
+                                        For suppliers
+                                    </p>
+                                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 md:mb-3">
+                                        Manufacturing Partners
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mb-6 md:mb-8">
+                                        Explore the sectors we are opening and our criteria for founding manufacturer
+                                        onboarding.
+                                    </p>
+                                    <Link
+                                        href="/browse"
+                                        className="inline-flex items-center min-h-[44px] text-sm font-semibold text-white hover:text-cyan-400 transition-colors group"
+                                    >
+                                        View Focus Sectors
+                                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </div>
                             </div>
                         </FadeIn>
                     </div>
